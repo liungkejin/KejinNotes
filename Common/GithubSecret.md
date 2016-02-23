@@ -100,8 +100,9 @@ $ git clone https://github.com/tiimgreen/github-cheat-sheet
 ## 将某个分支与其他所有分支进行对比
 
 当你点击某个仓库的分支（Branches）选项卡时
-
+```
 https://github.com/{user}/{repo}/branches
+```
 
 你会看到一个包含所有未合并的分支的列表。
 
