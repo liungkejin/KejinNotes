@@ -293,3 +293,79 @@ public static String getCurProcessName(Context context)
     return null;
 }
 ```
+
+## Gson 解析时遇到关键字
+当遇到
+```json
+{
+    "new" : true ,
+    "public" : false
+}
+```
+这种有 java 关键字的 json 数据时, 可以使用 google 的注解来转换
+```java
+public class Resp
+{
+    @SerilSerializedName("new");
+    public boolean isNew = false;
+
+    @SerilSerializedName("public");
+    public boolean isPublic = false;
+}
+```
+
+## Android 6.0 运行时权限检查
+```
+class PermissionsChecker {
+    private final Context context;
+
+    public PermissionsChecker(Context context) {
+        this.context = context;
+    }
+
+    public boolean lacksPermissions(String... permissions) {
+        for (String permission : permissions) {
+            if (lacksPermission(permission)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean lacksPermission(String permission) {
+        return ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_DENIED;
+    }
+}
+```
+
+```
+public class MainActivity extends AppCompatActivity {
+
+    static final String[] PERMISSIONS = new String[]{Manifest.permission.RECORD_AUDIO, Manifest.permission.MODIFY_AUDIO_SETTINGS};
+    private PermissionsChecker checker;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        checker = new PermissionsChecker(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (checker.lacksPermissions(PERMISSIONS)) {
+            startPermissionsActivity();
+        }
+    }
+
+    private void startPermissionsActivity() {
+        PermissionsActivity.startActivity(this, PERMISSIONS);
+    }
+}
+```
