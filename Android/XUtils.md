@@ -369,3 +369,19 @@ public class MainActivity extends AppCompatActivity {
     }
 }
 ```
+
+## 防止应用字体随系统字体的增大而增大
+```
+public BaseActivity extends AppCompatActivity
+{
+    @Override
+    public Resources getResources()
+    {
+        Resources res = super.getResources();
+        Configuration config = new Configuration();
+        config.setToDefaults();
+        res.updateConfiguration(config, res.getDisplayMetrics());
+        return res;
+    }
+}
+```
