@@ -385,3 +385,19 @@ public BaseActivity extends AppCompatActivity
     }
 }
 ```
+
+
+## Fragment对menu菜单的操作
+android4.0之后引入了fragment的概念，它的生命周期函数和activity几乎一样。对菜单的操作也是通过onCreateOptionMenu（）实现的。
+fragment可以通过实现 onCreateOptionMenu() 提供菜单项给activity的选项菜单。为了使这个方法接收调用,无论如何,
+你必须在 onCreate() 期间调用 setHasOptionsMenu() 来指出fragment愿意添加item到选项菜单(否则, fragment将接收不到对 onCreateOptionsMenu()的调用)
+
+随后从fragment添加到Option菜单的任何项,都会被 追加到现有菜单项的后面.当一个菜单项被选择,
+fragment也会接收到 对 onOptionsItemSelected() 的回调.
+也可以在你的fragment layout中通过调用 registerForContextMenu() 注册一个view来提供一个环境菜单.
+当用户打开环境菜单, fragment接收到一个对 onCreateContextMenu() 的调用.当用户选择一个项目,
+fragment接收到一个对onContextItemSelected() 的调用.
+
+注意: 尽管你的fragment会接收到它所添加的每一个菜单项被选择后的回调,  但实际上当用户选择一个菜单项时,
+activity会首先接收到对应的回调.如果activity的on-item-selected回调函数实现并没有处理被选中的项目,
+然后事件才会被传递到fragment的回调.
