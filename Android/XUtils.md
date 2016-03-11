@@ -401,3 +401,22 @@ fragment接收到一个对onContextItemSelected() 的调用.
 注意: 尽管你的fragment会接收到它所添加的每一个菜单项被选择后的回调,  但实际上当用户选择一个菜单项时,
 activity会首先接收到对应的回调.如果activity的on-item-selected回调函数实现并没有处理被选中的项目,
 然后事件才会被传递到fragment的回调.
+
+
+## ListView 中禁止 Item 可点击, 禁止 header 可点击
+重写 Adapter 中的两个方法
+```
+@Override
+public boolean areAllItemsEnabled() {
+    return false;
+}
+
+@Override
+public boolean isEnabled(int position)  {
+    return false;
+```
+
+要禁止 header, 在加入时调用
+```
+listView.addHeaderView(header, null, false); // 第三个参数就是表示是否可点击
+```
