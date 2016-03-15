@@ -420,3 +420,28 @@ public boolean isEnabled(int position)  {
 ```
 listView.addHeaderView(header, null, false); // 第三个参数就是表示是否可点击
 ```
+
+## 通过浏览器打开应用
+```
+<activity android:name=".activity.SharedTicketDetailActivity"
+          android:screenOrientation="portrait">
+    <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+
+        <!-- id -->
+        <data android:host="sharedticket"
+              android:scheme="dymfilm"/>
+    </intent-filter>
+</activity>
+```
+在浏览器内调用 "dymfilm://sharedticket?id=0", 如果是原生的浏览器就会进行跳转
+页面里面收到的intent 里面包含了一个 uri, 即这个链接, 所以可以这样获取参数数据
+```
+Intent intent = getIntent();
+Uri uri = intent.getData();
+if (uri != null) {
+    String id = uri.getQueryParameter("id");
+}
+```
