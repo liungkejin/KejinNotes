@@ -445,3 +445,24 @@ if (uri != null) {
     String id = uri.getQueryParameter("id");
 }
 ```
+
+## 解决滑动冲突
+在需要滑动的地方
+```
+view.setOnTouchListener(new View.OnTouchListener() {
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                conflictView.setEnabled(false);
+                break;
+
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL:
+                conflictView.setEnabled(true);
+                break;
+        }
+        return false;
+    }
+    })
+```
