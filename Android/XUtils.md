@@ -443,3 +443,49 @@ public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle sa
     return rootView;
 }
 ```
+
+## 通过浏览器打开应用
+```
+<activity android:name=".activity.SharedTicketDetailActivity"
+          android:screenOrientation="portrait">
+    <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+
+        <!-- id -->
+        <data android:host="sharedticket"
+              android:scheme="dymfilm"/>
+    </intent-filter>
+</activity>
+```
+在浏览器内调用 "dymfilm://sharedticket?id=0", 如果是原生的浏览器就会进行跳转
+页面里面收到的intent 里面包含了一个 uri, 即这个链接, 所以可以这样获取参数数据
+```
+Intent intent = getIntent();
+Uri uri = intent.getData();
+if (uri != null) {
+    String id = uri.getQueryParameter("id");
+}
+```
+
+## 解决滑动冲突
+在需要滑动的地方
+```
+view.setOnTouchListener(new View.OnTouchListener() {
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                conflictView.setEnabled(false);
+                break;
+
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL:
+                conflictView.setEnabled(true);
+                break;
+        }
+        return false;
+    }
+    })
+```
