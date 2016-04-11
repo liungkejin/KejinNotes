@@ -421,6 +421,29 @@ public boolean isEnabled(int position)  {
 listView.addHeaderView(header, null, false); // 第三个参数就是表示是否可点击
 ```
 
+## ListView 中 `getViewType()` 和 `getViewTypeCount()`
+在 listView 中使用多种 view, 就需要重写 `getViewType` 和 `getViewTypeCount` 方法
+不过要注意 `getViewType` 返回的值一定要在 `0..getViewTypeCount()-1` 内, 否则会出现数组越界异常
+
+
+## 防止 fragment 多次调用 onCreateView
+```java
+private View rootView;
+@Override
+public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    if (null != rootView) {
+        ViewGroup parent = (ViewGroup) rootView.getParent();
+        if (null != parent) {
+            parent.removeView(rootView);
+        }
+    } else {
+        rootView = inflater.inflate(layoutId, null);
+        initView(rootView);// 控件初始化
+    }
+    return rootView;
+}
+```
+
 ## 通过浏览器打开应用
 ```
 <activity android:name=".activity.SharedTicketDetailActivity"
